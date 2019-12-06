@@ -1,4 +1,4 @@
-package com.hwgif.common.configure.security;
+package com.hwgif.configure.security;
 
 import com.hwgif.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
