@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- author:   lc.huang,  date:    2019-12-6 17:49:43,    -->
+
+<mapper namespace="com.hwgif.demo.dao.impl.SysPermissionDaoImpl" >
+<resultMap id="BaseResultMap" type="com.hwgif.demo.bean.SysPermission" >
+    <result property="id" jdbcType="INTEGER" column="id"/>
+    <result property="name" jdbcType="VARCHAR" column="name"/>
+    <result property="description" jdbcType="VARCHAR" column="description"/>
+    <result property="url" jdbcType="VARCHAR" column="url"/>
+    <result property="pid" jdbcType="INTEGER" column="pid"/>
+</resultMap>
+<sql id="Base_Column_List" >
+id,
+name,
+description,
+url,
+pid
+        </sql>
+<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+select
+<include refid="Base_Column_List" />
+from sys_permission
+where  
+id = #{id}         </select>
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+delete from sys_permission
+where  
+id = #{id} 
+        </delete>
+<insert id="insert" parameterType="com.hwgif.demo.bean.SysPermission" useGeneratedKeys="true" keyProperty="id">
+insert into sys_permission (<include refid="Base_Column_List" />
+)
+values (
+null,<!--主键自动生成  -->
+#{name},
+#{description},
+#{url},
+#{pid}        )
+        </insert>
+<insert id="insertSelective" parameterType="com.hwgif.demo.bean.SysPermission" useGeneratedKeys="true" keyProperty="id">
+insert into sys_permission
+<trim prefix="(" suffix=")" suffixOverrides="," >
+    <if test=" id != null" >
+        id,
+    </if>
+    <if test=" name != null" >
+        name,
+    </if>
+    <if test=" description != null" >
+        description,
+    </if>
+    <if test=" url != null" >
+        url,
+    </if>
+    <if test=" pid != null" >
+        pid,
+    </if>
+</trim>
+<trim prefix="values (" suffix=")" suffixOverrides="," >
+<if test=" id != null" >
+    #{id},
+</if>
+<if test=" name != null" >
+    #{name},
+</if>
+<if test=" description != null" >
+    #{description},
+</if>
+<if test=" url != null" >
+    #{url},
+</if>
+<if test=" pid != null" >
+    #{pid},
+</if>
+        </trim>
+        </insert>
+<update id="updateByPrimaryKeySelective" parameterType="com.hwgif.demo.bean.SysPermission" >
+UPDATE sys_permission
+<set>
+    <if test="name!=null">
+        name = #{name},
+    </if>
+    <if test="description!=null">
+        description = #{description},
+    </if>
+    <if test="url!=null">
+        url = #{url},
+    </if>
+    <if test="pid!=null">
+        pid = #{pid},
+    </if>
+        </set>
+        WHERE
+        id = #{id}
+        </update>
+<update id="updateByPrimaryKey" parameterType="com.hwgif.demo.bean.SysPermission" >
+update sys_permission set
+name = #{name},
+description = #{description},
+url = #{url},
+pid = #{pid}
+        where
+        id = #{id} 
+        </update>
+
+        <!--查询条件-->
+<sql id="selectCondition">
+<where>
+    <trim suffixOverrides="and">
+        <!--
+      <if test=" entity != null">
+        <if test="entity.id!=null">
+          and id=#{entity.id}
+        </if>
+      </if>
+       -->
+</trim>
+<trim suffixOverrides="and">
+<if test="whereSql!=null">
+    and ${whereSql}
+</if>
+</trim>
+        </where>
+        </sql>
+
+        <!-- 根据条件查询 -->
+<select id="getListByEntityAndPageInfo" resultMap="BaseResultMap">
+select
+<include refid="Base_Column_List" />
+from sys_permission
+<include refid="selectCondition" />
+<if test="orderBy!=null">
+    ${orderBy}
+</if>
+<if test="pageInfo!=null">
+    limit ${pageInfo.size} offset ${pageInfo.startIndex}
+</if>
+</select>
+
+        <!-- 查询总数 -->
+<select id="getTotalByEntity" resultType="java.lang.Integer">
+select count(*) from sys_permission
+<include refid="selectCondition" />
+</select>
+
+        </mapper>

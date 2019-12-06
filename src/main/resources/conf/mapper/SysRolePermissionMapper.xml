@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- author:   lc.huang,  date:    2019-12-6 17:49:43,    -->
+
+<mapper namespace="com.hwgif.demo.dao.impl.SysRolePermissionDaoImpl" >
+<resultMap id="BaseResultMap" type="com.hwgif.demo.bean.SysRolePermission" >
+    <result property="id" jdbcType="INTEGER" column="id"/>
+    <result property="roleId" jdbcType="INTEGER" column="role_id"/>
+    <result property="permissionId" jdbcType="INTEGER" column="permission_id"/>
+</resultMap>
+<sql id="Base_Column_List" >
+id,
+role_id,
+permission_id
+        </sql>
+<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+select
+<include refid="Base_Column_List" />
+from sys_role_permission
+where  
+id = #{id}         </select>
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+delete from sys_role_permission
+where  
+id = #{id} 
+        </delete>
+<insert id="insert" parameterType="com.hwgif.demo.bean.SysRolePermission" useGeneratedKeys="true" keyProperty="id">
+insert into sys_role_permission (<include refid="Base_Column_List" />
+)
+values (
+null,<!--主键自动生成  -->
+#{roleId},
+#{permissionId}        )
+        </insert>
+<insert id="insertSelective" parameterType="com.hwgif.demo.bean.SysRolePermission" useGeneratedKeys="true" keyProperty="id">
+insert into sys_role_permission
+<trim prefix="(" suffix=")" suffixOverrides="," >
+    <if test=" id != null" >
+        id,
+    </if>
+    <if test=" roleId != null" >
+        role_id,
+    </if>
+    <if test=" permissionId != null" >
+        permission_id,
+    </if>
+</trim>
+<trim prefix="values (" suffix=")" suffixOverrides="," >
+<if test=" id != null" >
+    #{id},
+</if>
+<if test=" roleId != null" >
+    #{roleId},
+</if>
+<if test=" permissionId != null" >
+    #{permissionId},
+</if>
+        </trim>
+        </insert>
+<update id="updateByPrimaryKeySelective" parameterType="com.hwgif.demo.bean.SysRolePermission" >
+UPDATE sys_role_permission
+<set>
+    <if test="roleId!=null">
+        role_id = #{roleId},
+    </if>
+    <if test="permissionId!=null">
+        permission_id = #{permissionId},
+    </if>
+        </set>
+        WHERE
+        id = #{id}
+        </update>
+<update id="updateByPrimaryKey" parameterType="com.hwgif.demo.bean.SysRolePermission" >
+update sys_role_permission set
+role_id = #{roleId},
+permission_id = #{permissionId}
+        where
+        id = #{id} 
+        </update>
+
+        <!--查询条件-->
+<sql id="selectCondition">
+<where>
+    <trim suffixOverrides="and">
+        <!--
+      <if test=" entity != null">
+        <if test="entity.id!=null">
+          and id=#{entity.id}
+        </if>
+      </if>
+       -->
+</trim>
+<trim suffixOverrides="and">
+<if test="whereSql!=null">
+    and ${whereSql}
+</if>
+</trim>
+        </where>
+        </sql>
+
+        <!-- 根据条件查询 -->
+<select id="getListByEntityAndPageInfo" resultMap="BaseResultMap">
+select
+<include refid="Base_Column_List" />
+from sys_role_permission
+<include refid="selectCondition" />
+<if test="orderBy!=null">
+    ${orderBy}
+</if>
+<if test="pageInfo!=null">
+    limit ${pageInfo.size} offset ${pageInfo.startIndex}
+</if>
+</select>
+
+        <!-- 查询总数 -->
+<select id="getTotalByEntity" resultType="java.lang.Integer">
+select count(*) from sys_role_permission
+<include refid="selectCondition" />
+</select>
+
+        </mapper>
