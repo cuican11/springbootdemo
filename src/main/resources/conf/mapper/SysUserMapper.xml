@@ -83,13 +83,13 @@ password = #{password}
 <sql id="selectCondition">
 <where>
     <trim suffixOverrides="and">
-        <!--
+
       <if test=" entity != null">
-        <if test="entity.id!=null">
-          and id=#{entity.id}
+        <if test="entity.username!=null">
+          and username=#{entity.username}
         </if>
       </if>
-       -->
+
 </trim>
 <trim suffixOverrides="and">
 <if test="whereSql!=null">

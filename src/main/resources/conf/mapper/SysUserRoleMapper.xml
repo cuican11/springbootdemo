@@ -83,13 +83,16 @@ sys_role_id = #{sysRoleId}
 <sql id="selectCondition">
 <where>
     <trim suffixOverrides="and">
-        <!--
+
       <if test=" entity != null">
         <if test="entity.id!=null">
           and id=#{entity.id}
         </if>
+        <if test="entity.sysUserId!=null">
+          and sys_user_id=#{entity.sysUserId}
+        </if>
       </if>
-       -->
+
 </trim>
 <trim suffixOverrides="and">
 <if test="whereSql!=null">

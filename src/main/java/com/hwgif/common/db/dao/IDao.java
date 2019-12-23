@@ -12,8 +12,6 @@ import java.util.List;
  */
 public interface IDao<T extends Serializable,M> {
 
-    M getEntityById(T var);
-
     int updateByMapperId(String var1, M var2, String var3);
 
     List<M> selectByMapperId(String var1, M var2, PageInfo var3, String var4, String var5);
@@ -23,6 +21,12 @@ public interface IDao<T extends Serializable,M> {
     int delete(T var1);
 
     int update(M var1);
+
+    M getEntityById(T var1);
+
+    M getEntityByObject(M var1);
+
+    M getEntityByObject(M var1, String var2);
 
     int getCountByObject(M var1);
 

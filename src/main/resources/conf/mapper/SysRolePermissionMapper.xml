@@ -83,13 +83,16 @@ permission_id = #{permissionId}
 <sql id="selectCondition">
 <where>
     <trim suffixOverrides="and">
-        <!--
+
       <if test=" entity != null">
         <if test="entity.id!=null">
           and id=#{entity.id}
         </if>
+        <if test="entity.roleId!=null">
+          and role_id=#{entity.roleId}
+        </if>
       </if>
-       -->
+
 </trim>
 <trim suffixOverrides="and">
 <if test="whereSql!=null">
@@ -119,4 +122,14 @@ select count(*) from sys_role_permission
 <include refid="selectCondition" />
 </select>
 
-        </mapper>
+<!--    <select id="getUserAllPermission" resultType="java.util.List">-->
+<!--        select-->
+<!--        <include refid="Base_Column_List" />-->
+<!--        from sys_role where role_id in-->
+<!--        <foreach item="item" index="index" collection="list" open="(" separator="," close=")">-->
+<!--            #{item.}-->
+<!--        </foreach>-->
+<!--    </select>-->
+
+
+</mapper>

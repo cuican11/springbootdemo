@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.hwgif.common.db.bean.BaseEntity;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -20,7 +21,9 @@ public class SysRole extends BaseEntity {
 
 			private Integer id;  // 
 
-			private String name;  // 
+			private String name;  //
+
+			private List<SysPermission> permissionList;
 
 	public SysRole(){
 	}
@@ -47,9 +50,13 @@ public class SysRole extends BaseEntity {
 	}
 
 
+	public List<SysPermission> getPermissionList() {
+		return permissionList;
+	}
 
-
-
+	public void setPermissionList(List<SysPermission> permissionList) {
+		this.permissionList = permissionList;
+	}
 
 	public String toString() {
 		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

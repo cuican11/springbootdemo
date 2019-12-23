@@ -26,7 +26,9 @@ public class SysPermission extends BaseEntity {
 
 			private String url;  // 
 
-			private Integer pid;  // 
+			private Integer pid;  //
+
+			private String code;  //
 
 	public SysPermission(){
 	}
@@ -79,10 +81,13 @@ public class SysPermission extends BaseEntity {
 		return this.pid;
 	}
 
+	public String getCode() {
+		return code;
+	}
 
-
-
-
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public String toString() {
 		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

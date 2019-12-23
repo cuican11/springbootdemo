@@ -78,6 +78,15 @@ public abstract class BaseDao<T extends Serializable,M extends BaseEntity> exten
         return this.getSqlSession().selectOne(this.getMapperNameSpace()+ ".selectByPrimaryKey",var);
     }
 
+    public M getEntityByObject(M entity) {
+        return (M)this.getSqlSession().selectOne(this.getMapperNameSpace() + ".getListByEntityAndPageInfo", this.getMapParams(entity, (PageInfo)null, (String)null, (String)null));
+    }
+
+    public M getEntityByObject(M entity, String where) {
+
+        return this.getSqlSession().selectOne(this.getMapperNameSpace() + ".getListByEntityAndPageInfo", this.getMapParams(entity, (PageInfo)null, where, (String)null));
+    }
+
     public int updateByMapperId(String methodIdInMapper, M entity, String whereSql) {
         Integer ret = Integer.valueOf(this.getSqlSession().update(this.getMapperNameSpace() + "." + methodIdInMapper, this.getMapParams(entity, (PageInfo)null, whereSql, (String)null)));
         return ((Integer)ret).intValue();
@@ -103,7 +112,7 @@ public abstract class BaseDao<T extends Serializable,M extends BaseEntity> exten
         return ((Integer)e).intValue();
     }
 
-    public int getCountByObject(M entity) {
+    public int getCountByObject(M entity ) {
         Object e = this.getSqlSession().selectOne(this.getMapperNameSpace() + ".getTotalByEntity", this.getMapParams(entity, (PageInfo)null, (String)null, (String)null));
         return ((Integer)e).intValue();
     }

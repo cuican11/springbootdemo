@@ -1,5 +1,9 @@
 package com.hwgif.configure.security;
 
+import com.hwgif.demo.bean.SysPermission;
+import com.hwgif.demo.bean.SysRole;
+import com.hwgif.demo.bean.SysUser;
+import com.hwgif.demo.service.SysUserService;
 import com.hwgif.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,25 +25,24 @@ import java.util.List;
 public class HwgifUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private UserService userService;
+    private SysUserService sysUserService;
     /**
-     25      * 授权的时候是对角色授权，而认证的时候应该基于资源，而不是角色，因为资源是不变的，而用户的角色是会变的
-     26      */
+     * 授权的时候是对角色授权，而认证的时候应该基于资源，而不是角色，因为资源是不变的，而用户的角色是会变的
+     */
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-         com.hwgif.demo.bean.User sysUser = userService.find(1);
-         if (null == sysUser) {
-                 throw new UsernameNotFoundException(username);
-             }
-         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//         for (
-//                 role : sysUser.getRoleList()) {
-//                 for (SysPermission permission : role.getPermissionList()) {
-//                         authorities.add(new SimpleGrantedAuthority(permission.getCode()));
-//                     }
-//             }
+        SysUser sysUser = sysUserService.getLoadUserByName(1);
+        if (null == sysUser) {
+            throw new UsernameNotFoundException(username);
+        }
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (SysRole role : sysUser.getRoleList()) {
+            for (SysPermission permission : role.getPermissionList()) {
+                authorities.add(new SimpleGrantedAuthority(permission.getCode()));
+            }
+        }
 
-         return new User(sysUser.getName(), sysUser.getPassword(), authorities);
+        return new User(sysUser.getUsername(), sysUser.getPassword(), authorities);
     }
 }
