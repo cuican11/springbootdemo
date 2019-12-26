@@ -81,9 +81,41 @@ public class SysUserServiceImpl implements SysUserService {
     }*/
 
 	@Cacheable(key = "#id")
-	public SysUser getLoadUserByName(Integer id){
+	public SysUser getLoadUserById(Integer id){
 
 		SysUser sysUser = sysUserDao.getEntityById(id);
+
+		SysUserRole urCondition = new SysUserRole();
+		urCondition.setSysUserId(sysUser.getId());
+		List<SysUserRole> userRoles = sysUserRoleDao.getListByObject(urCondition);
+		List<Integer> rIds = new ArrayList<>();
+		List<SysRole> roles = new ArrayList<>();
+		for (SysUserRole userRole : userRoles ) {
+
+			SysRole role = sysRoleDao.getEntityById(userRole.getId());
+
+			SysRolePermission rpCondition = new SysRolePermission();
+			rpCondition.setRoleId(role.getId());
+			List<SysRolePermission> rps = sysRolePermissionDao.getListByObject(rpCondition);
+			List<SysPermission> spList = new ArrayList<>();
+			for ( SysRolePermission  rp : rps) {
+				SysPermission sp = sysPermissionDao.getEntityById(rp.getRoleId());
+				spList.add(sp);
+			}
+			role.setPermissionList(spList);
+			roles.add(role);
+		}
+
+		sysUser.setRoleList(roles);
+
+		return sysUser;
+	}
+
+	public SysUser getLoadUserByName(String name){
+
+		SysUser temp = new SysUser();
+		temp.setUsername(name);
+		SysUser sysUser = sysUserDao.getEntityByObject(temp);
 
 		SysUserRole urCondition = new SysUserRole();
 		urCondition.setSysUserId(sysUser.getId());

@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class LoginController {
 
-    @RequestMapping("/login.htm")
+    @RequestMapping("/signin")
     public String loginHtm(){
-        return "/demo/login";
+        return "demo/login";
     }
 
-    @RequestMapping("/login")
-    @ResponseBody
-    public String login(){
-        return "/demo/login";
-    }
+//    @RequestMapping("/login")
+////    @ResponseBody
+//    public String login(){
+//        return "demo/login";
+//    }
 
 
 }

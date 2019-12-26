@@ -32,7 +32,7 @@ public class HwgifUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUser sysUser = sysUserService.getLoadUserByName(1);
+        SysUser sysUser = sysUserService.getLoadUserByName(username);
         if (null == sysUser) {
             throw new UsernameNotFoundException(username);
         }

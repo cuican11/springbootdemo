@@ -27,6 +27,7 @@ public interface SysUserService {
 
 //    Integer delete(Integer id, Integer updateId);
 
-        SysUser getLoadUserByName(Integer id);
+        SysUser getLoadUserById(Integer id);
 
+        SysUser getLoadUserByName(String name);
  }

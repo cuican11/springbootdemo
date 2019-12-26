@@ -15,7 +15,8 @@ class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {
-		SysUser sysUser = sysUserService.getLoadUserByName(1);
+		SysUser sysUser = sysUserService.getLoadUserByName("xccint");
+		System.out.printf(sysUser.toString());
 	}
 
 }
