@@ -10,7 +10,7 @@
     <result property="description" jdbcType="VARCHAR" column="description"/>
     <result property="url" jdbcType="VARCHAR" column="url"/>
     <result property="pid" jdbcType="INTEGER" column="pid"/>
-    <result property="code" jdbcType="VARCHAR" column="pid"/>
+    <result property="code" jdbcType="VARCHAR" column="code"/>
 </resultMap>
 <sql id="Base_Column_List" >
 id,
@@ -18,7 +18,7 @@ name,
 description,
 url,
 pid,
-    code
+code
         </sql>
 <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
 select

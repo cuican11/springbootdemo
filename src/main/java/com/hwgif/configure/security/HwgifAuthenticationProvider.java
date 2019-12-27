@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.AbstractUserDetailsAuthen
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -29,6 +30,8 @@ import javax.servlet.http.HttpSession;
     public class HwgifAuthenticationProvider   extends AbstractUserDetailsAuthenticationProvider {//implements AuthenticationProvider {
         @Autowired
         private HwgifUserDetailsService userDetailsService;
+        @Autowired
+        BCryptPasswordEncoder passwordEncoder;
 
         @Override
         protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
@@ -41,6 +44,7 @@ import javax.servlet.http.HttpSession;
             String username = authentication.getName();
             //用户输入的密码
             String password = authentication.getCredentials().toString();
+            System.out.printf(password);
 
             //通过HwgifWebAuthenticationDetails获取用户输入的验证码信息
 //            HwgifWebAuthenticationDetails details = (HwgifWebAuthenticationDetails) authentication.getDetails();
@@ -57,7 +61,10 @@ import javax.servlet.http.HttpSession;
             //通过自定义的CustomUserDetailsService，以用户输入的用户名查询用户信息
             UserDetails userDetails = (UserDetails) userDetailsService.loadUserByUsername(username);
             //校验用户密码
-            if(!userDetails.getPassword().equals(password)){
+
+            System.out.printf(userDetails.getPassword());
+
+            if(!passwordEncoder.matches(password,userDetails.getPassword())){
 //                log.warn("密码错误");
                 throw new BadCredentialsException("密码错误");
             }

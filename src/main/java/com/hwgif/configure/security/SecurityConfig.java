@@ -1,8 +1,11 @@
 package com.hwgif.configure.security;
 
+import com.alibaba.fastjson.JSONArray;
+import com.hwgif.common.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -71,6 +75,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and()
+                .exceptionHandling()
+                .accessDeniedHandler(hwAccessDeniedHandler())
+                .and()
                 .logout().permitAll();
 
         // 关闭CSRF跨域
@@ -102,7 +109,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web){
-//        platform.ignoring().antMatchers("/");
+//        一般只有ignoring()配置需要重写：
+//
     }
 
     @Autowired
@@ -132,7 +140,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write("{\"status\":\"success\",\"msg\":\"登录成功\"}");
+                out.write(JSONArray.toJSONString(CommonResult.successResult("登录成功")));
                 out.flush();
                 out.close();
             }
@@ -183,4 +191,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
         };
     }
+
+    @Bean
+    public AccessDeniedHandler hwAccessDeniedHandler() {
+        AccessDeniedHandler accessDeniedHandler = new AccessDeniedHandler() {
+            @Override
+            public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
+                httpServletResponse.setContentType("application/json;charset=utf-8");
+                PrintWriter out = httpServletResponse.getWriter();
+                out.write(JSONArray.toJSONString(CommonResult.failResult(-1,"权限不足",null)));
+                out.flush();
+                out.close();
+            }
+        };
+        return accessDeniedHandler;
+    }
+
+
+
 }

@@ -26,6 +26,8 @@ public class HwgifUserDetailsService implements UserDetailsService {
 
     @Autowired
     private SysUserService sysUserService;
+
+
     /**
      * 授权的时候是对角色授权，而认证的时候应该基于资源，而不是角色，因为资源是不变的，而用户的角色是会变的
      */
@@ -36,13 +38,14 @@ public class HwgifUserDetailsService implements UserDetailsService {
         if (null == sysUser) {
             throw new UsernameNotFoundException(username);
         }
+
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         for (SysRole role : sysUser.getRoleList()) {
             for (SysPermission permission : role.getPermissionList()) {
                 authorities.add(new SimpleGrantedAuthority(permission.getCode()));
             }
         }
-
-        return new User(sysUser.getUsername(), sysUser.getPassword(), authorities);
+        UserEntity user = new UserEntity(sysUser.getUsername(), sysUser.getPassword(), "13558483203",authorities);
+        return user;
     }
 }

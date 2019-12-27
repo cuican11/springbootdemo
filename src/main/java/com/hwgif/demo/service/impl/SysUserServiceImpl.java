@@ -131,7 +131,7 @@ public class SysUserServiceImpl implements SysUserService {
 			List<SysRolePermission> rps = sysRolePermissionDao.getListByObject(rpCondition);
 			List<SysPermission> spList = new ArrayList<>();
 			for ( SysRolePermission  rp : rps) {
-				SysPermission sp = sysPermissionDao.getEntityById(rp.getRoleId());
+				SysPermission sp = sysPermissionDao.getEntityById(rp.getPermissionId());
 				spList.add(sp);
 			}
 			role.setPermissionList(spList);
