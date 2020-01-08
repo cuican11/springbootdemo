@@ -14,7 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author lc.huang
@@ -39,7 +41,7 @@ public class HwgifUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
 
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         for (SysRole role : sysUser.getRoleList()) {
             for (SysPermission permission : role.getPermissionList()) {
                 authorities.add(new SimpleGrantedAuthority(permission.getCode()));

@@ -80,8 +80,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().permitAll();
 
-        // 关闭CSRF跨域
-        http.csrf().disable();
     }
 
     @Override
@@ -89,17 +87,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //将自定义的CustomAuthenticationProvider装配到AuthenticationManagerBuilder
         auth.authenticationProvider(hwgifAuthenticationProvider);
         //将自定的CustomUserDetailsService装配到AuthenticationManagerBuilder
-        auth.userDetailsService(hwgifUserDetailsService).passwordEncoder(new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence charSequence) {
-                return charSequence.toString();
-            }
-
-            @Override
-            public boolean matches(CharSequence charSequence, String s) {
-                return s.equals(charSequence.toString());
-            }
-        });
+//        auth.userDetailsService(hwgifUserDetailsService).passwordEncoder(new PasswordEncoder() {
+//            @Override
+//            public String encode(CharSequence charSequence) {
+//                return charSequence.toString();
+//            }
+//
+//            @Override
+//            public boolean matches(CharSequence charSequence, String s) {
+//                return s.equals(charSequence.toString());
+//            }
+//        });
     }
 
 
@@ -162,7 +160,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write("{\"status\":\"error\",\"msg\":\"登录失败\"}");
+                out.write(JSONArray.toJSONString(CommonResult.failResult(0,"登录失败",null)));
                 out.flush();
                 out.close();
             }
@@ -185,7 +183,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write("{\"status\":\"success\",\"msg\":\"登出成功\"}");
+                out.write(JSONArray.toJSONString(CommonResult.successResult("登出成功")));
                 out.flush();
                 out.close();
             }

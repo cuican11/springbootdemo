@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Created by lc.huang on 2019/11/18.
  * Description
  */
-
 @Controller
 public class AdminController {
 
