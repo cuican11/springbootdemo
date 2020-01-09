@@ -61,6 +61,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()//验证策略策略链
                 // 如果有允许匿名的url，填在下面
                 .antMatchers("/public/**").permitAll() //无需登录路径
+                .antMatchers("/v2/api-docs",//swagger api json
+                        "/swagger-resources/configuration/ui",//用来获取支持的动作
+                        "/swagger-resources",//用来获取api-docs的URI
+                        "/swagger-resources/configuration/security",//安全选项
+                        "/swagger-ui.html",
+                        "/webjars/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signin").permitAll()
                 .anyRequest().authenticated()
@@ -79,6 +85,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(hwAccessDeniedHandler())
                 .and()
                 .logout().permitAll();
+
+//        拦截器这里加
 
     }
 
@@ -107,6 +115,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web){
+
 //        一般只有ignoring()配置需要重写：
 //
     }
