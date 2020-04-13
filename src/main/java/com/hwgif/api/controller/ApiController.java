@@ -40,17 +40,17 @@ public class ApiController {
             true) String
             goodsType) throws Exception{
 
-//        int i = 1/0;
+        int i = 1/0;
 
-//        User user = new User();
-//        user.setPhone("12345678901");
-//        user.setEmail("qq.com");
-//        user.setName("momo");
-//        user.setPassword("123");
-//        user.setSalt("ss");
-//        user.setStatus("1");
+        User user = new User();
+        user.setPhone("12345678901");
+        user.setEmail("qq.com");
+        user.setName("momo");
+        user.setPassword("123");
+        user.setSalt("ss");
+        user.setStatus("1");
 //        userService.insertUser(user);
-        User user = userService.find(1);
+//        User user = userService.find(1);
         return CommonResult.successResult(user.toString());
     }
 
