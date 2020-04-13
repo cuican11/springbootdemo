@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 class DemoApplicationTests {
 
@@ -39,5 +41,7 @@ class DemoApplicationTests {
 			i ++;
 		}
 	}
+
+
 
 }
