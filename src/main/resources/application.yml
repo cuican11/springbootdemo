@@ -1,0 +1,56 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: the-lose-time
+    database: service_the_lose_time
+
+  #datasource configure
+
+  datasource:
+    master:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/${spring.application.database}?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+      initialSize: 5
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      validationQuery: select now() from dual
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      filters: stat,wall,log4j
+
+    two:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/test2?useUnicode=true&allowPublicKeyRetrieval=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: select now() from dual
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      filters: stat,wall,log4j
+      logSlowSql: true
+
+
+  # redis
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password: redis
+

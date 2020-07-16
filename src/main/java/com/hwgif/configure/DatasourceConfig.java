@@ -30,32 +30,32 @@ public class DatasourceConfig {
     static final String PACKAGE = "com.hwgif.demo.dao.impl";
     static final String MAPPER_LOCATION = "classpath:conf/mapper/*.xml";
 
-    @Value("${spring.datasource.url}")
+    @Value("${spring.datasource.master.url}")
     private String url;
-    @Value("${spring.datasource.username}")
+    @Value("${spring.datasource.master.username}")
     private String user;
-    @Value("${spring.datasource.password}")
+    @Value("${spring.datasource.master.password}")
     private String password;
-    @Value("${spring.datasource.driverClassName}")
+    @Value("${spring.datasource.master.driverClassName}")
     private String driverClass;
 
-    @Value("${spring.datasource.maxActive}")
+    @Value("${spring.datasource.master.maxActive}")
     private Integer maxActive;
-    @Value("${spring.datasource.minIdle}")
+    @Value("${spring.datasource.master.minIdle}")
     private Integer minIdle;
-    @Value("${spring.datasource.initialSize}")
+    @Value("${spring.datasource.master.initialSize}")
     private Integer initialSize;
-    @Value("${spring.datasource.maxWait}")
+    @Value("${spring.datasource.master.maxWait}")
     private Long maxWait;
-    @Value("${spring.datasource.timeBetweenEvictionRunsMillis}")
+    @Value("${spring.datasource.master.timeBetweenEvictionRunsMillis}")
     private Long timeBetweenEvictionRunsMillis;
-    @Value("${spring.datasource.minEvictableIdleTimeMillis}")
+    @Value("${spring.datasource.master.minEvictableIdleTimeMillis}")
     private Long minEvictableIdleTimeMillis;
-    @Value("${spring.datasource.testWhileIdle}")
+    @Value("${spring.datasource.master.testWhileIdle}")
     private Boolean testWhileIdle;
-    @Value("${spring.datasource.testWhileIdle}")
+    @Value("${spring.datasource.master.testWhileIdle}")
     private Boolean testOnBorrow;
-    @Value("${spring.datasource.testOnBorrow}")
+    @Value("${spring.datasource.master.testOnBorrow}")
     private Boolean testOnReturn;
 
     @Bean(name = "dataSource")
