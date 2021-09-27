@@ -1,6 +1,6 @@
 package com.hwgif.configure.security;
 
-import com.alibaba.fastjson.JSONArray;
+import com.google.gson.Gson;
 import com.hwgif.common.CommonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -147,7 +146,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write(JSONArray.toJSONString(CommonResult.successResult("登录成功")));
+                out.write(new Gson().toJson(CommonResult.successResult("登录成功")));
                 out.flush();
                 out.close();
             }
@@ -169,7 +168,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write(JSONArray.toJSONString(CommonResult.failResult(0,"登录失败",null)));
+                out.write(new Gson().toJson(CommonResult.failResult(0,"登录失败",null)));
                 out.flush();
                 out.close();
             }
@@ -192,7 +191,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write(JSONArray.toJSONString(CommonResult.successResult("登出成功")));
+                out.write(new Gson().toJson(CommonResult.successResult("登出成功")));
                 out.flush();
                 out.close();
             }
@@ -206,7 +205,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write(JSONArray.toJSONString(CommonResult.failResult(-1,"权限不足",null)));
+                out.write(new Gson().toJson(CommonResult.failResult(-1,"权限不足",null)));
                 out.flush();
                 out.close();
             }
