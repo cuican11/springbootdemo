@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataExchangePackage>
+<envelopeInfo>
+<sourceID>GLBANK</sourceID>
+<destinationID>TAX</destinationID>
+<destinationAppID>TAX</destinationAppID>
+<globalBusinessID>1</globalBusinessID>
+<businessType>BW_BUSINESS</businessType>
+</envelopeInfo>
+<transferInfo>
+<senderID>GLBANK</senderID>
+<receiverID>TAX</receiverID>
+<messageID>45</messageID>
+<sourceMessageID>1</sourceMessageID>
+<isRetry>N</isRetry>
+<sendTime>2019-09-09 10:56:51</sendTime>
+</transferInfo>
+<contentControl>
+<zip>
+<isZip>false</isZip>
+<zipType/>
+<isEncrypt>false</isEncrypt>
+<encryptType/>
+<isCode>false</isCode>
+<getCodeType/>
+</zip>
+<encrypt/>
+<code/>
+</contentControl>
+<packageInfo>
+<sequence>1</sequence>
+<content>
+<![CDATA[<?xml version='1.0' encoding='GBK'?><syptRequest><nsrsbh>45</nsrsbh><sqxh>1</sqxh><nd
+>2016-9,2019-9</nd><qsnd>2016,2017,2018,
+2019</qsnd><bankCode>GLBANK</bankCode><grantCode>SQS201807243956</grantCode><tbpName>1</tbpName
+><tbpCode>1</tbpCode><businessType>279914</businessType><bankaccount>1</bankaccount><bankpassword>1
+</bankpassword><exchangetype>1</exchangetype><nsrlx></nsrlx></syptRequest>]]>
+</content>
+</packageInfo>
+</dataExchangePackage>
+
