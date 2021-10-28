@@ -16,7 +16,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-
 		<!-- 以下依赖版本严格参照 进行设定 -->
 		<service.version>0.0.1-SNAPSHOT</service.version>
 		<mysql-connector.version>8.0.19</mysql-connector.version>
@@ -181,6 +180,8 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<encoding>UTF-8</encoding>
+
 				</configuration>
 			</plugin>
 			<plugin>
@@ -209,6 +210,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 			<!-- 传递maven变量到系统变量里  -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
