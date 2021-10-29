@@ -93,7 +93,8 @@ public class ProductLockServiceImpl implements ProductLockService {
 
 	/**
 	 * 示例
-	 * 模拟抢购  jmeter 100线程并发请求 立马重现超扣库存
+	 * 模拟抢购  synchronized + 数据库version字段 扼制超扣
+	 *
 	 * */
 	@Transactional(rollbackFor = RuntimeException.class)
 	public synchronized CommonResult updateStockCommon(Integer id, Integer stock){
