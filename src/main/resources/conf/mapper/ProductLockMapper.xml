@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- author:   lc.huang,  date:    2021-10-29 9:27:30,    产品信息表-->
+
+<mapper namespace="com.hwgif.demo.dao.impl.ProductLockDaoImpl" >
+<resultMap id="BaseResultMap" type="com.hwgif.demo.bean.ProductLock" >
+    <result property="id" jdbcType="INTEGER" column="id"/>
+    <result property="productNo" jdbcType="VARCHAR" column="product_no"/>
+    <result property="stock" jdbcType="INTEGER" column="stock"/>
+    <result property="version" jdbcType="INTEGER" column="version"/>
+    <result property="createTime" jdbcType="TIMESTAMP" column="create_time"/>
+    <result property="updateTime" jdbcType="TIMESTAMP" column="update_time"/>
+</resultMap>
+<sql id="Base_Column_List" >
+id,
+product_no,
+stock,
+version,
+create_time,
+update_time
+        </sql>
+
+
+<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+select
+<include refid="Base_Column_List" />
+from product_lock
+where  
+id = #{id}         </select>
+
+
+
+<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+delete from product_lock
+where  
+id = #{id} 
+        </delete>
+<insert id="insert" parameterType="com.hwgif.demo.bean.ProductLock" useGeneratedKeys="true" keyProperty="id">
+insert into product_lock (<include refid="Base_Column_List" />
+)
+values (
+null,<!--主键自动生成  -->
+#{productNo},
+#{stock},
+#{version},
+now(),<!--生成日期  -->
+#{updateTime}        )
+        </insert>
+<insert id="insertSelective" parameterType="com.hwgif.demo.bean.ProductLock" useGeneratedKeys="true" keyProperty="id">
+insert into product_lock
+<trim prefix="(" suffix=")" suffixOverrides="," >
+    <if test=" id != null" >
+        id,
+    </if>
+    <if test=" productNo != null" >
+        product_no,
+    </if>
+    <if test=" stock != null" >
+        stock,
+    </if>
+    <if test=" version != null" >
+        version,
+    </if>
+    <if test=" createTime != null" >
+        create_time,
+    </if>
+    <if test=" updateTime != null" >
+        update_time,
+    </if>
+</trim>
+<trim prefix="values (" suffix=")" suffixOverrides="," >
+<if test=" id != null" >
+    #{id},
+</if>
+<if test=" productNo != null" >
+    #{productNo},
+</if>
+<if test=" stock != null" >
+    #{stock},
+</if>
+<if test=" version != null" >
+    #{version},
+</if>
+<if test=" createTime != null" >
+    #{createTime},
+</if>
+<if test=" updateTime != null" >
+    #{updateTime},
+</if>
+        </trim>
+        </insert>
+<update id="updateByPrimaryKeySelective" parameterType="com.hwgif.demo.bean.ProductLock" >
+UPDATE product_lock
+<set>
+    <if test="productNo!=null">
+        product_no = #{productNo},
+    </if>
+    <if test="stock!=null">
+        stock = #{stock},
+    </if>
+    <if test="version!=null">
+        version = #{version},
+    </if>
+    <if test="createTime!=null">
+        create_time = #{createTime},
+    </if>
+        </set>
+        WHERE
+        id = #{id}
+        </update>
+
+
+<update id="deleteBatch" >
+update product_lock set  is_del = 1 where id in
+<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+    #{id}
+</foreach>
+</update>
+
+<update id="updateByPrimaryKey" parameterType="com.hwgif.demo.bean.ProductLock" >
+update product_lock set
+product_no = #{productNo},
+stock = #{stock},
+version = #{version},
+create_time = #{createTime},
+
+        where
+        id = #{id} 
+        </update>
+
+        <!--查询条件-->
+<sql id="selectCondition">
+<where>
+    <trim suffixOverrides="and">
+        <!--
+      <if test=" entity != null">
+        <if test="entity.id!=null">
+          and id=#{entity.id}
+        </if>
+      </if>
+       -->
+</trim>
+<trim suffixOverrides="and">
+<if test="whereSql!=null">
+    and ${whereSql}
+</if>
+</trim>
+        </where>
+        </sql>
+
+        <!-- 根据条件查询 -->
+<select id="getListByEntityAndPageInfo" resultMap="BaseResultMap">
+select
+<include refid="Base_Column_List" />
+from product_lock
+<include refid="selectCondition" />
+<if test="orderBy!=null">
+    ${orderBy}
+</if>
+<if test="pageInfo!=null">
+    limit ${pageInfo.size} offset ${pageInfo.startIndex}
+</if>
+</select>
+
+        <!-- 查询总数 -->
+<select id="getTotalByEntity" resultType="java.lang.Integer">
+select count(*) from product_lock
+<include refid="selectCondition" />
+</select>
+    <!--一般库存更新 示例-->
+    <!--更新库存-->
+    <update id="updateStock" parameterType="com.hwgif.demo.bean.ProductLock">
+        update product_lock
+        set stock = stock - #{stock,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+        </mapper>
+

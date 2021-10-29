@@ -1,11 +1,14 @@
 package com.hwgif.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 /**
  * Created by lc.huang on 2019/11/19.
  * Description
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CommonResult implements Serializable{
     public static final int CODE_EXCEPTION = -1;
     public static final int CODE_SUCCESS = 1;
