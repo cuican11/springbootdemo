@@ -176,6 +176,16 @@ select count(*) from product_lock
         where id = #{id,jdbcType=INTEGER}
     </update>
 
+    <!--库存更新优化 示例-->
+    <!--更新库存-->
+    <update id="updateStockCommon"  parameterType="com.hwgif.demo.bean.ProductLock">
+        update product_lock
+        set stock = stock - #{stock,jdbcType=INTEGER} ,
+            version = version + 1
+        where id = #{id,jdbcType=INTEGER}
+          and version = #{version,jdbcType=INTEGER}
+    </update>
+
 
         </mapper>
 

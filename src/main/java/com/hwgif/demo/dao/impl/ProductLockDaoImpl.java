@@ -15,6 +15,10 @@ import org.springframework.stereotype.Repository;
 public class ProductLockDaoImpl extends BaseDao<Integer, ProductLock> implements ProductLockDao {
 
     public Integer updateStock(ProductLock productLock){
-        return this.getSqlSession().selectOne(this.getMapperNameSpace() + ".updateStock",productLock);
+        return this.getSqlSession().update(this.getMapperNameSpace() + ".updateStock",productLock);
+    }
+
+    public Integer updateStockCommon(ProductLock productLock){
+        return this.getSqlSession().update(this.getMapperNameSpace() + ".updateStockCommon",productLock);
     }
 }

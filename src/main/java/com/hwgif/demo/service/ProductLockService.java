@@ -1,6 +1,7 @@
 package com.hwgif.demo.service;
 
 
+import com.hwgif.common.CommonResult;
 import com.hwgif.common.db.domain.PageControl;
 import com.hwgif.common.db.domain.PageInfo;
 import com.hwgif.demo.bean.ProductLock;
@@ -27,4 +28,7 @@ public interface ProductLockService {
         PageControl<ProductLock> page(ProductLock productLock, PageInfo pageInfo, String whereSql, String orderSql);
 
         ProductLock updateStock(Integer id,Integer stock);
+
+        CommonResult updateStockCommon(Integer id, Integer stock);
+
  }

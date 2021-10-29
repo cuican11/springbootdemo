@@ -98,9 +98,10 @@ public class ProductLockController {
     @PostMapping(value = "/update")
     public CommonResult update(@RequestParam(value = "id",required = true) Integer id , @RequestParam(value = "stock" ,required = true) Integer stock) {
 
-    	productLockService.updateStock(id,stock);
+//    	productLockService.updateStock(id,stock);
 
-		return CommonResult.successResult("success");
+    	return productLockService.updateStockCommon(id,stock);
+
     }
 
     /**

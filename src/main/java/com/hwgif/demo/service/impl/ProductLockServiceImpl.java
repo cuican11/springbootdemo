@@ -1,5 +1,6 @@
 package com.hwgif.demo.service.impl;
 
+import com.hwgif.common.CommonResult;
 import com.hwgif.common.db.domain.PageControl;
 import com.hwgif.common.db.domain.PageInfo;
 import com.hwgif.demo.bean.ProductLock;
@@ -70,7 +71,11 @@ public class ProductLockServiceImpl implements ProductLockService {
 
 
 
-	public ProductLock updateStock(Integer id,Integer stock){
+	/**
+	 * 示例
+	* 模拟抢购  jmeter 100线程并发请求 立马重现超扣库存
+	* */
+	public synchronized ProductLock updateStock(Integer id,Integer stock){
 		ProductLock productLock = productLockDao.getEntityById(id);
 
 		if (null == productLock){
@@ -81,11 +86,33 @@ public class ProductLockServiceImpl implements ProductLockService {
 			return productLock;
 		}
 		System.out.println("进入update");
-		ProductLock temp = new ProductLock();
-		temp.setId(id);
-		temp.setStock(stock);
-		productLockDao.updateStock(temp);
+		productLock.setStock(stock);
+		productLockDao.updateStock(productLock);
 		return productLock;
+	}
+
+	/**
+	 * 示例
+	 * 模拟抢购  jmeter 100线程并发请求 立马重现超扣库存
+	 * */
+	@Transactional(rollbackFor = RuntimeException.class)
+	public synchronized CommonResult updateStockCommon(Integer id, Integer stock){
+		ProductLock productLock = productLockDao.getEntityById(id);
+
+		if (null == productLock){
+			return CommonResult.failResult("商品不存在");
+		}
+		System.out.println("库存："+ productLock.getStock()+"  预购："+stock);
+		if (productLock.getStock().intValue() < stock) {
+			return CommonResult.failResult("库存不足");
+		}
+		System.out.println("进入update");
+		productLock.setStock(stock);
+		Integer ret = productLockDao.updateStockCommon(productLock);
+		if (ret <= 0){
+			throw new RuntimeException("更新失败");
+		}
+		return CommonResult.successResult("成功更新");
 	}
 
 }

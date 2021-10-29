@@ -10,4 +10,6 @@ import com.hwgif.demo.bean.ProductLock;
 public interface ProductLockDao extends IDao<Integer, ProductLock> {
 
     Integer updateStock(ProductLock productLock);
+
+    Integer updateStockCommon(ProductLock productLock);
 }
