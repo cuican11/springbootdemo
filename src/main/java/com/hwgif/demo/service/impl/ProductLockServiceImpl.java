@@ -95,6 +95,14 @@ public class ProductLockServiceImpl implements ProductLockService {
 	 * 示例
 	 * 模拟抢购  synchronized + 数据库version字段 扼制超扣
 	 *
+	 * 采集方案
+	 * 1、分表 如1000库存分到10个表中 分摊行锁的压力  缺点：
+	 *
+	 * 取用点：
+	 * 	    1.做扣减流水账 既每次扣减insert一条扣减log到记录表log表中 可助于对账， insert into budget_log (biz_no, budget_code) values (#{bizNo}, #{budget_code}) 其中biz_no表示一次扣减的唯一标识，budget_code是一个预算计划的唯一标识
+	 *
+	 *
+	 *
 	 * */
 	@Transactional(rollbackFor = RuntimeException.class)
 	public synchronized CommonResult updateStockCommon(Integer id, Integer stock){
