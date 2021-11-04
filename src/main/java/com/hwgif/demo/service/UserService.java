@@ -4,6 +4,9 @@ package com.hwgif.demo.service;
 import com.hwgif.common.db.domain.PageInfo;
 import com.hwgif.common.db.domain.PageControl;
 import com.hwgif.demo.bean.User;
+import com.hwgif.example.easyexcel.bean.UserExcelBean;
+
+import java.util.List;
 
 
 /**
@@ -27,4 +30,5 @@ public interface UserService {
 
 //    Integer delete(Integer id, Integer updateId);
 
+        List<UserExcelBean> getdata(Integer page);
  }

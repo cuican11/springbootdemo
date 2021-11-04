@@ -6,10 +6,13 @@ import com.hwgif.common.db.domain.PageControl;
 import com.hwgif.demo.bean.User;
 import com.hwgif.demo.service.UserService;
 import com.hwgif.demo.dao.UserDao;
+import com.hwgif.example.easyexcel.bean.UserExcelBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 用户
@@ -58,6 +61,17 @@ public class UserServiceImpl implements UserService {
 
 	public PageControl<User> page(User user, PageInfo pageInfo, String whereSql, String orderSql){
 		return userDao.getPageByObject(user, pageInfo, whereSql, orderSql);
+	}
+
+	public List<UserExcelBean> getdata(Integer page){
+		Integer size = 10000;
+		PageInfo pageInfo = new PageInfo(page,size);
+		Integer startId = (page - 1) * 10000 + 1;
+		List<User> pagedata = userDao.exportuser(" id >= " + startId," order by id asc limit "+ size);
+		if (null != pagedata && pagedata.size() > 0){
+			return UserExcelBean.getList(pagedata);
+		}
+		return null;
 	}
 
     /*public Integer delete(Integer id, Integer updateId) {

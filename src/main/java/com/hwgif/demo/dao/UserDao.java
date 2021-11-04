@@ -3,6 +3,8 @@ package com.hwgif.demo.dao;
 import com.hwgif.common.db.dao.IDao;
 import com.hwgif.demo.bean.User;
 
+import java.util.List;
+
 /**
  * 用户
  * @author lc.huang
@@ -15,4 +17,7 @@ public interface UserDao extends IDao<Integer, User> {
     User findUser(Integer id);
 
     User UpdateUser(User user);
+
+
+    List<User> exportuser(String  whereSql,String orderBySql);
 }

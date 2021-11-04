@@ -19,19 +19,19 @@ import java.math.BigDecimal;
 @ActiveProfiles("dev")
 class DemoApplicationTests {
 
-//	@Autowired
-//	SysUserService sysUserService;
+	@Autowired
+	SysUserService sysUserService;
 //
 //	@Autowired
 //	BCryptPasswordEncoder passwordEncoder;
 //
 
-//
-//	@Test
-//	void contextLoads() {
-//		SysUser sysUser = sysUserService.getLoadUserByName("xccint");
+
+	@Test
+	void contextLoads() {
+		SysUser sysUser = sysUserService.getLoadUserByName("xccint");
 //		System.out.printf(sysUser.toString());
-//	}
+	}
 //
 //	@Test
 //	void bcryptPasswordEncoder(){

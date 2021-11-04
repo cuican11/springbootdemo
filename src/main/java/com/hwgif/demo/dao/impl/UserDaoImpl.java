@@ -8,6 +8,10 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 用户
  * @author lc.huang
@@ -31,5 +35,15 @@ public class UserDaoImpl extends BaseDao<Integer, User> implements UserDao {
     public User UpdateUser(User user){
         this.update(user);
         return user;
+    }
+
+    public List<User> exportuser(String whereSql, String orderBySql){
+        Map<String,String> params = new HashMap();
+        params.put("whereSql",whereSql);
+        params.put("orderBy",orderBySql);
+
+        List<User> users =  this.getSqlSession().selectList(this.getMapperNameSpace() + ".exportUser" ,params);
+
+        return users;
     }
 }
