@@ -61,3 +61,8 @@ jedis:
     host: 127.0.0.1
     port: 6379
     password:
+
+jwt:
+  secret: scuv3uogRhunAOymHQYobYrbtcDGttmtFVz6WeNZ1p40YIaGiVLDipZ5t5CFZvuB
+  expiration: 1800000
+  token: token

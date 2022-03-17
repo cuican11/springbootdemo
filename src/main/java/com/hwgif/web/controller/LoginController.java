@@ -18,7 +18,7 @@ public class LoginController {
     }
 
 //    @RequestMapping("/login")
-////    @ResponseBody
+//    @ResponseBody
 //    public String login(){
 //        return "demo/login";
 //    }

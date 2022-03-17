@@ -116,7 +116,9 @@ public class SysUserServiceImpl implements SysUserService {
 		SysUser temp = new SysUser();
 		temp.setUsername(name);
 		SysUser sysUser = sysUserDao.getEntityByObject(temp);
-
+        if (null == sysUser){
+        	return null;
+		}
 		SysUserRole urCondition = new SysUserRole();
 		urCondition.setSysUserId(sysUser.getId());
 		List<SysUserRole> userRoles = sysUserRoleDao.getListByObject(urCondition);

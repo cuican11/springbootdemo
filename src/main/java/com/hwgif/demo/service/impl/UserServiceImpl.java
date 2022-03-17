@@ -64,9 +64,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public List<UserExcelBean> getdata(Integer page){
-		Integer size = 10000;
+		Integer size = 100000;
 		PageInfo pageInfo = new PageInfo(page,size);
-		Integer startId = (page - 1) * 10000 + 1;
+		Integer startId = (page - 1) * size + 1;
 		List<User> pagedata = userDao.exportuser(" id >= " + startId," order by id asc limit "+ size);
 		if (null != pagedata && pagedata.size() > 0){
 			return UserExcelBean.getList(pagedata);

@@ -8,4 +8,5 @@ mybatis:
 
 logging:
   level:
+    com.hwgif: debug
     com.hwgif.demo.dao: debug

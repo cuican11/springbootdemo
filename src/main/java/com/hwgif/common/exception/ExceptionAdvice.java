@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Created by lc.huang on 2019/11/19.
  * Description  目标全局异常处理
  */
-@ControllerAdvice(basePackages = "com.hwgif.api")
+@ControllerAdvice(basePackages = "com.hwgif")
 public class ExceptionAdvice {
 
     private static Logger logger = LoggerFactory.getLogger(ExceptionAdvice.class);

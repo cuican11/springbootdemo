@@ -21,10 +21,10 @@ class DemoApplicationTests {
 
 	@Autowired
 	SysUserService sysUserService;
-//
-//	@Autowired
-//	BCryptPasswordEncoder passwordEncoder;
-//
+
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
+
 
 
 	@Test
@@ -33,22 +33,22 @@ class DemoApplicationTests {
 //		System.out.printf(sysUser.toString());
 	}
 //
-//	@Test
-//	void bcryptPasswordEncoder(){
-//		String password = "admin";
-//		System.out.println(password + ": encrypt");
+	@Test
+	void bcryptPasswordEncoder(){
+		String password = "123456";
+		System.out.println(password + ": encrypt");
 //					String hashedPassword = passwordEncoder.encode(password);
 //			System.out.println("hashedPassword:" + hashedPassword);
-//		int i = 0;
-//		while(i < 10){
-//
-////			String hashedPassword = passwordEncoder.encode(password);
-////			System.out.println("hashedPassword:" + hashedPassword);
-//
-//			System.out.println("match result:" + passwordEncoder.matches(password,"$2a$04$8zW2TI2odq58czgW45HXAO57U7UYQr2UTl19Bv5MCli7b6VjK/VN6"));
-//			i ++;
-//		}
-//	}
+		int i = 0;
+		while(i < 10){
+
+			String hashedPassword = passwordEncoder.encode(password);
+			System.out.println("hashedPassword:" + hashedPassword);
+
+			System.out.println("match result:" + passwordEncoder.matches(password,"$2a$04$92HXiu7lcBqZ3E7sdXPmpON/xyAiEjuWhG/QX6iaz0N24Yf1xZsPG"));
+			i ++;
+		}
+	}
 
 	@Test
 	void jedisTest(){

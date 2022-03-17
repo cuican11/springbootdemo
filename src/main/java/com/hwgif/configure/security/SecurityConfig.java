@@ -7,18 +7,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
@@ -37,26 +41,46 @@ import java.io.PrintWriter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
-     private HwgifUserDetailsService userService;
+    JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
     private HwgifAuthenticationProvider hwgifAuthenticationProvider;
 
+
     @Autowired
-    private HwgifUserDetailsService hwgifUserDetailsService;
+    JwtAuthorizationTokenFilter jwtAuthorizationTokenFilter;
 
     @Autowired
     private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource;
 
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
 
+    // 先来这里认证一下
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        auth.eraseCredentials(false);
+    }
 
+    /**
+     * 拦截配置
+     * @param http
+     * @throws Exception
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-
         http
-                .csrf() //跨站
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and().csrf() //跨站
                 .disable() //关闭跨站检测
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests()//验证策略策略链
                 // 如果有允许匿名的url，填在下面
                 .antMatchers("/public/**").permitAll() //无需登录路径
@@ -68,24 +92,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signin").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                // 设置登陆页
-                .formLogin().loginPage("/signin")
-                .successHandler(authenticationSuccessHandler())
-                .failureHandler(authenticationFailureHandler())
-                // post提交登录地址  无需实现
-                .loginProcessingUrl("/login")
-                // 自定义登陆用户名和密码参数，默认为username和password
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .and()
-                .exceptionHandling()
-                .accessDeniedHandler(hwAccessDeniedHandler())
-                .and()
-                .logout().permitAll();
+                .anyRequest().authenticated();
 
-//        拦截器这里加
+        http.addFilterBefore(jwtAuthorizationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
@@ -93,18 +102,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //将自定义的CustomAuthenticationProvider装配到AuthenticationManagerBuilder
         auth.authenticationProvider(hwgifAuthenticationProvider);
-        //将自定的CustomUserDetailsService装配到AuthenticationManagerBuilder
-//        auth.userDetailsService(hwgifUserDetailsService).passwordEncoder(new PasswordEncoder() {
-//            @Override
-//            public String encode(CharSequence charSequence) {
-//                return charSequence.toString();
-//            }
-//
-//            @Override
-//            public boolean matches(CharSequence charSequence, String s) {
-//                return s.equals(charSequence.toString());
-//            }
-//        });
     }
 
 
@@ -114,21 +111,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web){
-
 //        一般只有ignoring()配置需要重写：
 //
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-        auth.eraseCredentials(false);
-    }
+
     //密码加密配置
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(4);
     }
+
+
     //登入成功
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
@@ -212,7 +206,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         };
         return accessDeniedHandler;
     }
-
-
 
 }

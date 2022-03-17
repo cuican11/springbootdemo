@@ -27,4 +27,6 @@ public class AdminController {
         model.addAttribute("action","ljj");
         return "demo/demo";
     }
+
+
 }
