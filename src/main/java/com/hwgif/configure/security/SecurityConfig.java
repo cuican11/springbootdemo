@@ -18,7 +18,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -48,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private HwgifAuthenticationProvider hwgifAuthenticationProvider;
 
-
     @Autowired
     JwtAuthorizationTokenFilter jwtAuthorizationTokenFilter;
 
@@ -69,6 +67,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * 需要放行的URL
+     */
+    private static final String[] AUTH_WHITELIST = {
+            // -- swagger ui
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/login"
+            // other public endpoints of your API may be appended to this array
+    };
+
+    /**
      * 拦截配置
      * @param http
      * @throws Exception
@@ -83,19 +96,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()//验证策略策略链
                 // 如果有允许匿名的url，填在下面
-                .antMatchers("/public/**").permitAll() //无需登录路径
-                .antMatchers("/v2/api-docs",//swagger api json
-                        "/swagger-resources/configuration/ui",//用来获取支持的动作
-                        "/swagger-resources",//用来获取api-docs的URI
-                        "/swagger-resources/configuration/security",//安全选项
-                        "/swagger-ui.html",
-                        "/webjars/**").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/signin").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers(AUTH_WHITELIST).permitAll() //无需登录路径
+                .anyRequest().authenticated()
+                .and()
+                // ↓  JWT token 拦截
+                .addFilterBefore(jwtAuthorizationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                // ↓  登录过滤器
+                .addFilterAt(customAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutSuccessHandler(logoutSuccessHandler())
+                .permitAll();
 
-        http.addFilterBefore(jwtAuthorizationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
+    //注册自定义的UsernamePasswordAuthenticationFilter
+    @Bean
+    LoginAuthenticationFilter customAuthenticationFilter() throws Exception {
+        LoginAuthenticationFilter filter = new LoginAuthenticationFilter();
+        filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        filter.setFilterProcessesUrl("/login/self");
+
+        //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
     }
 
     @Override
