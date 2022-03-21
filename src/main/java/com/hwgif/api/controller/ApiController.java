@@ -40,7 +40,7 @@ public class ApiController {
             true) String
             goodsType) throws Exception{
 
-        int i = 1/0;
+     //   int i = 1/0;
 
         User user = new User();
         user.setPhone("12345678901");

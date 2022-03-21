@@ -1,31 +1,17 @@
 package com.hwgif.configure.security;
 
+import com.hwgif.demo.bean.SysRole;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
-//public class UserEntity extends User {
-//
-//    private String phone;
-//
-//
-//    public UserEntity(String username, String password, Collection<? extends GrantedAuthority> authorities){
-//        super(username, password, authorities);
-//    }
-//
-//
-//    public UserEntity(String username, String password, String phone ,Collection<? extends GrantedAuthority> authorities){
-//        super(username, password, authorities);
-//        this.phone = phone;
-//    }
-//
-//    public String getPhone() {
-//        return phone;
-//    }
-//}
+
+@Data
 public class UserEntity implements UserDetails {
 
     private String username;
@@ -44,6 +30,8 @@ public class UserEntity implements UserDetails {
 
     private final boolean enabled;
 
+    private List<SysRole> roles;
+
     public UserEntity(String username, String password, String phone, Set<SimpleGrantedAuthority> authorities) {
         this(username, password, phone,authorities, true, true,true, true);
     }
@@ -60,12 +48,9 @@ public class UserEntity implements UserDetails {
     }
 
 
-    public String getPhone() {
-        return this.phone;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
+        //
         return this.authorities;
     }
 

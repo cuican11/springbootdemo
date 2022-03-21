@@ -65,4 +65,8 @@ jedis:
 jwt:
   secret: scuv3uogRhunAOymHQYobYrbtcDGttmtFVz6WeNZ1p40YIaGiVLDipZ5t5CFZvuB
   expiration: 1800000
-  token: token
+  token: Authorization
+
+logging:
+  level:
+    root: info

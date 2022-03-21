@@ -51,7 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     JwtAuthorizationTokenFilter jwtAuthorizationTokenFilter;
 
     @Autowired
-    private AuthenticationDetailsSource<HttpServletRequest, WebAuthenticationDetails> authenticationDetailsSource;
+    JwtTokenUtil jwtTokenUtil;
+
 
     @Bean
     @Override
@@ -60,11 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     // 先来这里认证一下
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-        auth.eraseCredentials(false);
-    }
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+//        auth.eraseCredentials(false);
+//    }
 
     /**
      * 需要放行的URL
@@ -115,19 +116,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         LoginAuthenticationFilter filter = new LoginAuthenticationFilter();
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
         filter.setAuthenticationFailureHandler(authenticationFailureHandler());
-        filter.setFilterProcessesUrl("/login/self");
-
+        filter.setFilterProcessesUrl("/login");
         //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //将自定义的CustomAuthenticationProvider装配到AuthenticationManagerBuilder
-        auth.authenticationProvider(hwgifAuthenticationProvider);
-    }
-
 
     /**
      * security检验忽略的请求，比如静态资源不需要登录的可在本处配置
@@ -164,7 +157,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
                 httpServletResponse.setContentType("application/json;charset=utf-8");
                 PrintWriter out = httpServletResponse.getWriter();
-                out.write(new Gson().toJson(CommonResult.successResult("登录成功")));
+                UserEntity user =  (UserEntity) authentication.getPrincipal();
+                String jwt = jwtTokenUtil.generateToken(user);
+                out.write(new Gson().toJson(CommonResult.successResult(jwt)));
                 out.flush();
                 out.close();
             }

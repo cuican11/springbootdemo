@@ -1,6 +1,7 @@
 package com.hwgif.configure.security;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
+@Slf4j
 @Component
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
 
@@ -37,7 +40,9 @@ public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
             try {
+
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
+                log.info("username:"+username);
             } catch (ExpiredJwtException e) {
             }
         }
