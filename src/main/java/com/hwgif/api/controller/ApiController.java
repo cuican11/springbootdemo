@@ -7,6 +7,7 @@ import com.hwgif.demotwo.bean.UserNd;
 import com.hwgif.demotwo.service.UserNdService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,7 @@ public class ApiController {
             @ApiImplicitParam(paramType = "query", name = "goodsType", value = "qweqweq", required = true, dataType =
                     "String")
     })
+    @PreAuthorize("hasAnyAuthority('a')")
     @RequestMapping("hallo")
     public CommonResult halloword(HttpServletRequest request , HttpSession session , @RequestParam(value = "goodsType",
             required =

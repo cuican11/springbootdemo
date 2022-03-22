@@ -60,12 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
-    // 先来这里认证一下
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-//        auth.eraseCredentials(false);
-//    }
 
     /**
      * 需要放行的URL
@@ -109,6 +103,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
     }
+
+
 
     //注册自定义的UsernamePasswordAuthenticationFilter
     @Bean

@@ -1,8 +1,7 @@
 package com.hwgif.configure.security;
 
 
-import com.hwgif.demo.bean.SysUser;
-import com.hwgif.demo.service.SysUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -19,34 +18,34 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-    /**
-     * 描述：自定义SpringSecurity的认证器
-     *
-     * @Author
-     * @Date 2019/4/21 17:30
-     * @Version V1.0
-     **/
-    @Component
-    public class HwgifAuthenticationProvider   extends AbstractUserDetailsAuthenticationProvider {//implements AuthenticationProvider {
-        @Autowired
-        private HwgifUserDetailsService userDetailsService;
-        @Autowired
-        BCryptPasswordEncoder passwordEncoder;
+/**
+ * 描述：自定义SpringSecurity的认证器
+ *
+ * @Author
+ * @Date 2019/4/21 17:30
+ * @Version V1.0
+ **/
+@Slf4j
+@Component
+public class HwgifAuthenticationProvider   extends AbstractUserDetailsAuthenticationProvider {//implements AuthenticationProvider {
+    @Autowired
+    private HwgifUserDetailsService userDetailsService;
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
 
-        @Override
-        protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
+    @Override
+    protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
 
-        }
+    }
 
-        @Override
-        public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-            //用户输入的用户名
-            String username = authentication.getName();
-            //用户输入的密码
-            String password = authentication.getCredentials().toString();
-            System.out.printf(password);
-
-            //通过HwgifWebAuthenticationDetails获取用户输入的验证码信息
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        //用户输入的用户名
+        String username = authentication.getName();
+        //用户输入的密码
+        String password = authentication.getCredentials().toString();
+        log.info("进入 hwgif的authentication");
+        //通过HwgifWebAuthenticationDetails获取用户输入的验证码信息
 //            HwgifWebAuthenticationDetails details = (HwgifWebAuthenticationDetails) authentication.getDetails();
 //            String verifyCode = details.getVerifyCode();
 //            if(null == verifyCode || verifyCode.isEmpty()){
@@ -58,53 +57,52 @@ import javax.servlet.http.HttpSession;
 ////                log.warn("验证码输入错误");
 //                throw new DisabledException("验证码输入错误");
 //            }
-            //通过自定义的CustomUserDetailsService，以用户输入的用户名查询用户信息
-            UserDetails userDetails = (UserDetails) userDetailsService.loadUserByUsername(username);
-            //校验用户密码
+        //通过自定义的CustomUserDetailsService，以用户输入的用户名查询用户信息
+        UserDetails userDetails = (UserDetails) userDetailsService.loadUserByUsername(username);
+        //校验用户密码
 
-            System.out.printf(userDetails.getPassword());
 
-            if(!passwordEncoder.matches(password,userDetails.getPassword())){
+        if(!passwordEncoder.matches(password,userDetails.getPassword())){
 //                log.warn("密码错误");
-                throw new BadCredentialsException("密码错误");
-            }
-            Object principalToReturn = userDetails;
-            //将用户信息塞到SecurityContext中，方便获取当前用户信息
-            return this.createSuccessAuthentication(principalToReturn, authentication, userDetails);
+            throw new BadCredentialsException("密码错误");
         }
+        Object principalToReturn = userDetails;
+        //将用户信息塞到SecurityContext中，方便获取当前用户信息
+        return this.createSuccessAuthentication(principalToReturn, authentication, userDetails);
+    }
 
-        @Override
-        protected UserDetails retrieveUser(String s, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
-            return null;
-        }
+    @Override
+    protected UserDetails retrieveUser(String s, UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
+        return null;
+    }
 
-        /**
-         * 验证用户输入的验证码
-         * @param inputVerifyCode
-         * @return
-         */
-        public boolean validateVerifyCode(String inputVerifyCode){
-            //获取当前线程绑定的request对象
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            // 这个VerifyCodeFactory.SESSION_KEY是在servlet中存入session的名字
-            HttpSession session = request.getSession();
+    /**
+     * 验证用户输入的验证码
+     * @param inputVerifyCode
+     * @return
+     */
+    public boolean validateVerifyCode(String inputVerifyCode){
+        //获取当前线程绑定的request对象
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        // 这个VerifyCodeFactory.SESSION_KEY是在servlet中存入session的名字
+        HttpSession session = request.getSession();
 //            String verifyCode = (String)session.getAttribute(VerifyCodeUtil.SESSION_KEY);
-            String verifyCode = (String)session.getAttribute("VerifyCodeUtil.SESSION_KEY");
-            if(null == verifyCode || verifyCode.isEmpty()){
+        String verifyCode = (String)session.getAttribute("VerifyCodeUtil.SESSION_KEY");
+        if(null == verifyCode || verifyCode.isEmpty()){
 //                log.warn("验证码过期请重新验证");
-                throw new DisabledException("验证码过期，请重新验证");
-            }
-            // 不分区大小写
-            verifyCode = verifyCode.toLowerCase();
-            inputVerifyCode = inputVerifyCode.toLowerCase();
+            throw new DisabledException("验证码过期，请重新验证");
+        }
+        // 不分区大小写
+        verifyCode = verifyCode.toLowerCase();
+        inputVerifyCode = inputVerifyCode.toLowerCase();
 
 //            log.info("验证码：{}, 用户输入：{}", verifyCode, inputVerifyCode);
 
-            return verifyCode.equals(inputVerifyCode);
-        }
-
-        @Override
-        public boolean supports(Class<?> authentication) {
-            return authentication.equals(UsernamePasswordAuthenticationToken.class);
-        }
+        return verifyCode.equals(inputVerifyCode);
     }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+    }
+}

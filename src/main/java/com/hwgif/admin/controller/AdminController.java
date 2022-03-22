@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class AdminController {
 
-    @PreAuthorize("hasAuthority('0003')")
+    @PreAuthorize("hasAuthority('b')")
     @GetMapping("/demo")
     public String demoView(Model model, @AuthenticationPrincipal UserEntity userDetails){
 
