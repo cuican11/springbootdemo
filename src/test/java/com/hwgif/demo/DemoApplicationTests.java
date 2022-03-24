@@ -4,6 +4,9 @@ import com.hwgif.common.util.RedisUtil;
 import com.hwgif.demo.bean.SysUser;
 import com.hwgif.demo.service.SysUserService;
 import com.hwgif.demo.service.UserService;
+import com.hwgif.designpattern.strategypattern.BeanUtil;
+import com.hwgif.designpattern.strategypattern.Strategy;
+import com.hwgif.designpattern.strategypattern.StrategyContext;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.hwgif.designpattern.strategypattern.impl.*;
+
 
 import java.math.BigDecimal;
 
@@ -52,6 +57,11 @@ class DemoApplicationTests {
 
 	@Test
 	void jedisTest(){
+//		Strategy strategy = (Strategy) BeanUtil.getBean("operationAdd");
+//		System.out.println(BeanUtil.getBean("addStrategy","2"));
+//		StrategyContext context = new StrategyContext(strategy);
+//		Integer add =  context.executeStrategy(1,2);
+//		System.out.println(add);
 
 	}
 

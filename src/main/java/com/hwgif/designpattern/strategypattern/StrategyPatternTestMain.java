@@ -16,15 +16,13 @@ public class StrategyPatternTestMain {
      */
     public static void main(String[] args) {
 
-        StrategyContext context = new StrategyContext(new OperationAdd());
-        Integer add =  context.executeStrategy(1,2);
-        System.out.println(add);
-        context = new StrategyContext(new OperationSubstract());
-        Integer sub =  context.executeStrategy(1,2);
-        System.out.println(sub);
-        context = new StrategyContext(new OperationMultiply());
-        Integer mul =  context.executeStrategy(19,2);
-        System.out.println(mul);
+
+//        context = new StrategyContext(new OperationSubstract());
+//        Integer sub =  context.executeStrategy(1,2);
+//        System.out.println(sub);
+//        context = new StrategyContext(new OperationMultiply());
+//        Integer mul =  context.executeStrategy(19,2);
+//        System.out.println(mul);
 
     }
 }

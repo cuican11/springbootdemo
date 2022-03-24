@@ -5,7 +5,11 @@ import com.hwgif.demo.bean.User;
 import com.hwgif.demo.service.UserService;
 import com.hwgif.demotwo.bean.UserNd;
 import com.hwgif.demotwo.service.UserNdService;
+import com.hwgif.designpattern.strategypattern.BeanUtil;
+import com.hwgif.designpattern.strategypattern.Strategy;
+import com.hwgif.designpattern.strategypattern.StrategyContext;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,7 @@ import javax.servlet.http.HttpSession;
  * Created by lc.huang on 2019/11/18.
  * Description
  */
+@Slf4j
 @Api(value = "demo接口", description = "demo接口", position = 1)
 @RestController
 public class ApiController {
@@ -53,6 +58,14 @@ public class ApiController {
         user.setStatus("1");
 //        userService.insertUser(user);
 //        User user = userService.find(1);
+
+        Strategy strategy = (Strategy) BeanUtil.getBean("operationAdd");
+        StrategyContext context = new StrategyContext(strategy);
+        Integer add =  context.executeStrategy(1,2);
+        System.out.println("add:"+add);
+        log.info(BeanUtil.getBeanByStrategyName("addStrategy").toString());
+        log.info(BeanUtil.getBeanByStrategyName("multiply").toString());
+
         return CommonResult.successResult(user.toString());
     }
 

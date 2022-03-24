@@ -32,6 +32,11 @@ public class UserEntity implements UserDetails {
 
     private List<SysRole> roles;
 
+    public UserEntity() {
+        this("", "", "",null, true, true,true, true);
+
+    }
+
     public UserEntity(String username, String password, String phone, Set<SimpleGrantedAuthority> authorities) {
         this(username, password, phone,authorities, true, true,true, true);
     }
