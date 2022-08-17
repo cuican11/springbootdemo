@@ -36,9 +36,7 @@ public class BeanUtil implements ApplicationContextAware {
     }
 
     public static Object getBeanByStrategyName(String name){
-
         Map<String, Object> map = getApplicationContext().getBeansWithAnnotation(StrategyName.class);
-
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             StrategyName strategyName = entry.getValue().getClass().getAnnotation(StrategyName.class);
             String val = strategyName.value();
@@ -47,6 +45,5 @@ public class BeanUtil implements ApplicationContextAware {
             }
         }
         return null;
-
     }
 }
